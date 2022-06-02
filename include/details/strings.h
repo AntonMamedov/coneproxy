@@ -18,7 +18,8 @@ typedef struct string {
     size_t len;
 } string_t;
 
-void init_string(string_t* dst);
+void string_init(string_t* dst);
+void string_release(string_t* dst);
 const char* string_data(const string_t* src);
 ssize_t string_copy(string_t* dst, const char* src);
 
