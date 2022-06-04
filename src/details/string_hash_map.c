@@ -41,6 +41,7 @@ int string_hash_map_init(string_hash_map_t* dst, size_t map_size, size_t load_fa
 
     dst->map_size = map_size;
     dst->load_factor = load_factor;
+    dst->size = 0;
     if (string_hash_map_allocate_buffer(dst) < 0)
         return -1;
     return 0;
@@ -97,6 +98,7 @@ ssize_t string_hash_map_delete(string_hash_map_t* dst, const char* key) {
     dst->states[index] = DELETED;
     string_release(&dst->map[index].key);
     string_release(&dst->map[index].value);
+    dst->size--;
     return index;
 }
 
@@ -154,6 +156,7 @@ ssize_t string_hash_map_insert(string_hash_map_t* dst, const char* key, const ch
                 dst->states[index] = TAKEN;
                 string_copy_c_str(&dst->map[index].key, key);
                 string_copy_c_str(&dst->map[index].value, value);
+                dst->size++;
                 return (ssize_t)index;
             case DELETED:
                 assert(0 && "the new table should not have deleted fields");
